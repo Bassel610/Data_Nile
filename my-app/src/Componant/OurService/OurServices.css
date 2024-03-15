@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* AboutUs.css */
+.OurServices {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 50px; /* Adjust padding as needed */
+    text-align: center; /* Center align text */
+    position: relative;
+    top: 173px;
+  }
+  
+  .OurServices h2 {
+    color: #ab844e; /* Dark gray text color */
+    margin-bottom: 20px; /* Add some space below the heading */
+  }
+  
+  .OurServices .BigText {
+    font-family: 'Roboto', sans-serif; /* Use Roboto font with fallback to sans-serif */
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+  }
+  
+  /* Media query for responsiveness */

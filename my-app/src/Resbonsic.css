@@ -1,0 +1,46 @@
+@media (max-width: 768px) {
+    .Header .Logo{
+        margin: auto !important;
+    }
+    .MenuIcon {
+        display: block; /* Show the menu icon on small screens */
+    }
+
+    .List {
+        display: none; /* Hide the list by default on small screens */
+    }
+    .slideStyles{
+        height: 400px !important;
+    }
+    .Slider{
+        height: 380px;
+    }
+    .VideoSection{
+        height: 148px !important;
+    }
+    .AboutUs {
+        padding: 30px; /* Reduce padding for smaller screens */
+    }
+    
+    .AboutUs h2 {
+        font-size: 24px; /* Reduce heading font size for smaller screens */
+    }
+    
+    .AboutUs .BigText {
+        font-size: 13px; /* Reduce text font size for smaller screens */
+    }
+    .OurServices {
+        padding: 30px; /* Reduce padding for smaller screens */
+    }
+    
+    .OurServices h2 {
+        font-size: 24px; /* Reduce heading font size for smaller screens */
+    }
+    
+    .BigText {
+        font-size: 13px !important; /* Reduce text font size for smaller screens */
+    }
+    .ContactUs{
+        top: 173px;
+    }
+}

@@ -1,0 +1,148 @@
+/* AboutUs.css */
+.ContactUs {
+  background-color: #f8f9fa;
+  padding: 50px;
+  text-align: center;
+  position: relative;
+  top: 127px;
+}
+
+.ContactUs h2 {
+  color: #ab844e;
+  margin-bottom: 20px;
+}
+
+.ContactUsForm {
+  width: 30%;
+  height: 93%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f0f0f0;
+  padding: 20px;
+  background-color: white;
+  z-index: 100000;
+  overflow-y: auto;
+  border-radius: 6px;
+  display: none;
+}
+
+.ContactUsForm .CloseForm {
+  width: 7px;
+  height: 10px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  display: flex;
+}
+
+.ContactUsForm .CloseForm div {
+  width: 50%;
+  height: 100%;
+  border-radius: 7px;
+  background-color: black;
+}
+
+.ContactUsForm .CloseForm div:nth-child(1) {
+  transform: rotate(45deg);
+  position: relative;
+  left: 4px;
+}
+
+.ContactUsForm .CloseForm div:nth-child(2) {
+  transform: rotate(-45deg);
+}
+
+.ContactUsForm h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Scrollbar styles */
+.ContactUsForm::-webkit-scrollbar {
+  width: 10px;
+}
+
+.ContactUsForm::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.ContactUsForm::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.ContactUsForm label {
+  width: 75%;
+  height: 70px;
+  display: block;
+  margin: 10px;
+  position: relative;
+  left: 10%;
+}
+
+.ContactUsForm label span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.ContactUsForm label input,
+.ContactUsForm label select {
+  position: absolute;
+  left: 10px;
+  top: 29px;
+  width: 90%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.ContactUsForm .BTN {
+  width: 100%;
+}
+
+.ContactUsForm .BTN button {
+  width: 60%;
+  margin: auto;
+  background-color: #333;
+}
+
+label.required::after {
+  content: "*";
+  color: red;
+  margin-left: 5px;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .ContactUsForm {
+      width: 80%; /* Adjust form width for smaller screens */
+      left: 50%;
+      top: 53%;
+      transform: translate(-50%, -50%);
+  }
+
+  .ContactUsForm label {
+      width: 90%; /* Adjust label width for smaller screens */
+      left: 5%;
+  }
+
+  .ContactUsForm label input,
+  .ContactUsForm label select {
+      width: 80%; /* Adjust input width for smaller screens */
+  }
+
+  .ContactUsForm .BTN button {
+      width: 80%; /* Adjust button width for smaller screens */
+  }
+}

@@ -1,0 +1,44 @@
+.Header{
+    width: 100%;
+    height: 100px;
+    background-color: #1b1b1b;
+    position: fixed;
+    top: 0;
+    display: flex;
+    z-index: 10000;
+}
+.Header .Logo{
+    width: 144px;
+    height: 90px;
+    margin: 5px 0 5px 17px;
+}
+.Header .Logo img{
+    width: 100%;
+    height: 100%;
+}
+
+.Header .List{
+    position: absolute;
+    right: 100px;
+    bottom: -5px;
+}
+.Header .List ul{
+    display: flex;
+    width: 600px;
+}
+.Header .List ul li{
+    list-style: none;
+    margin: 10px;
+    margin-left: 48px;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.Header .List ul li:hover{
+    color: #ab844e;
+}
+.Header .List ul li:nth-child(1){  
+    color: #ab844e;
+}
+
