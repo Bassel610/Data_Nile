@@ -1,0 +1,48 @@
+/* Styles for the InvitBox */
+.InviteBox {
+  width: 85%;
+  display: flex ;
+  flex-direction: column;
+  justify-content: start;
+}
+
+/* Styles for the parent container of InvitContainer elements */
+.InviteContainerWrapper {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto 20px auto;
+  width: 55%; /* Adjusted width for responsiveness */
+}
+
+/* Styles for each InvitContainer */
+.InviteContainer {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .InviteBox {
+      width: 90%; /* Adjusted width for smaller screens */
+  }
+
+  .InviteContainerWrapper {
+    width: 90%;
+    padding: 15px;
+    top: 188px;
+    left: 38%;
+  }
+  .Logo{
+    width: 100%;
+    height: 155px;
+    z-index: 100000;
+    position: fixed;
+}
+}
