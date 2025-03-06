@@ -11,7 +11,7 @@
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px var(--shadow-color);
   margin: 20px auto 20px auto;
   width: 55%; /* Adjusted width for responsiveness */
 }
@@ -23,8 +23,18 @@
   padding: 10px;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px var(--shadow-color);
   margin-bottom: 20px;
+}
+.InviteContainer strong {
+  color: var(--primary-text);
+}
+.InviteContainer :not(strong) {
+  color: var(--main-text);
+}
+.InviteContainer button {
+  background: var(--primary-bg);
+  color: white;
 }
 
 /* Media query for responsiveness */

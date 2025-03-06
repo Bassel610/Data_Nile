@@ -1,7 +1,7 @@
 .Header{
     width: 100%;
     height: 100px;
-    background-color: #1b1b1b;
+    background-color: var(--main-bg);
     position: fixed;
     top: 0;
     display: flex;
@@ -30,15 +30,15 @@
     list-style: none;
     margin: 10px;
     margin-left: 48px;
-    color: white;
+    color: var(--white-text);
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
 }
 .Header .List ul li:hover{
-    color: #ab844e;
+    color: var(--gold-hover);
 }
 .Header .List ul li:nth-child(1){  
-    color: #ab844e;
+    color: var(--gold-hover);
 }
 

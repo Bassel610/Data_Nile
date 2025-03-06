@@ -10,7 +10,7 @@
   }
   
   .AboutUs h2 {
-    color: #ab844e; /* Dark gray text color */
+    color: var(--gold-hover); /* Dark gray text color */
     margin-bottom: 20px; /* Add some space below the heading */
   }
   
@@ -18,5 +18,5 @@
     font-family: 'Roboto', sans-serif; /* Use Roboto font with fallback to sans-serif */
     font-size: 18px;
     line-height: 1.6;
-    color: #666;
+    color: var(--main-text);
   }

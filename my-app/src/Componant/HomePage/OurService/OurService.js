@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import "./OurServices.css"
-function Services() {
-    const [servicesContent, setServicesContent] = useState('');
+function Services({setIndicator}) {
+    const [servicesContent, setServicesContent] = useState([]);
 
     useEffect(() => {
+        setIndicator(true)
         const fetchServicesContent = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/services');
-                setServicesContent(response.data.services); // Accessing the 'services' property
+                setServicesContent(response.data); // Accessing the 'services' property
+                setIndicator(false)
             } catch (error) {
+                setIndicator(false)
                 console.error('Error fetching Services section content:', error);
             }
         };
@@ -21,9 +24,9 @@ function Services() {
         <>
             <div className="OurServices">
                 <div>
-                    <h2>Our Services</h2>
+                    <h2>{servicesContent.title}</h2>
                     <div className="BigText">
-                    <p>{servicesContent}</p>
+                    <p>{servicesContent.description}</p>
                     </div>
                 </div>
             </div>

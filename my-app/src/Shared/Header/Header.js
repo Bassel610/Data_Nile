@@ -1,7 +1,8 @@
-import Logo from "../../Media/Logo.jpg"
+import { useEffect, useState } from "react";
 import "./Header.css"
+import axios from "axios";
 function Header ({OpenDialog}) {
-
+    const [getLogos, setGetLogos] = useState([]);
     let HomeScroll = () => {
         window.scrollTo({top: 0, behavior: 'smooth'})
     }
@@ -17,11 +18,25 @@ function Header ({OpenDialog}) {
             OpenDialog()
         }, 1000)
     }
+
+
+    useEffect(() => {
+        const fetchImages = async () => {
+          try {
+            const response = await axios.get("http://localhost:5000/images");
+            setGetLogos(response.data?.[0].Logos?.filter((ele) => ele.isActive === true)?.[0] || []);
+          } catch (error) {
+            console.error("Error fetching images:", error);
+          }
+        };
+        fetchImages();
+      }, []);
+
     return (
         <>
             <div className="Header">
                 <div className="Logo">
-                    <img src={Logo} alt=";" />
+                    <img src={getLogos?.url} alt=";" />
                 </div>
                 <div className="List">
                     <ul>

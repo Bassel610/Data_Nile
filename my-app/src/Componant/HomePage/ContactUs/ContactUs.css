@@ -8,13 +8,22 @@
 }
 
 .ContactUs h2 {
-  color: #ab844e;
+  color: var(--gold-hover);
+  margin-bottom: 20px;
+}
+.ContactUs h4 {
+  color: var(--main-text);
+  margin-bottom: 20px;
+}
+.ContactUs button {
+  color: white;
+  background-color: var(--primary-bg);
   margin-bottom: 20px;
 }
 
 .ContactUsForm {
   width: 30%;
-  height: 93%;
+  height: auto;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -58,7 +67,7 @@
 .ContactUsForm h1 {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: var(--primary-text);
   margin-bottom: 20px;
 }
 
@@ -72,7 +81,7 @@
 }
 
 .ContactUsForm::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--primary-bg);
   border-radius: 10px;
 }
 
@@ -92,7 +101,7 @@
   display: block;
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: var(--main-text);
 }
 
 .ContactUsForm label input,
@@ -103,7 +112,7 @@
   width: 90%;
   padding: 10px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
 }
 
@@ -114,7 +123,8 @@
 .ContactUsForm .BTN button {
   width: 60%;
   margin: auto;
-  background-color: #333;
+  color: white;
+  background-color: var(--primary-bg);
 }
 
 label.required::after {

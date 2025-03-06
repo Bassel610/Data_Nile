@@ -2,16 +2,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import "./AboutUs.css"
-function AboutUs() {
-    const [aboutContent, setAboutContent] = useState('');
+function AboutUs({setIndicator}) {
+    const [aboutContent, setAboutContent] = useState([]);
 
     useEffect(() => {
+        setIndicator(true)
         const fetchAboutContent = async () => {
             try {
                 // Use a CORS proxy service to bypass CORS restrictions during development
                 const response = await axios.get('http://localhost:5000/about');
-                setAboutContent(response.data.about);
+                setAboutContent(response.data);
+                setIndicator(false)
             } catch (error) {
+                setIndicator(false)
                 console.error('Error fetching about section content:', error);
             }
         };
@@ -22,9 +25,9 @@ function AboutUs() {
         <>
             <div className="AboutUs">
                 <div>
-                    <h2>About Us</h2>
+                    <h2>{aboutContent.title}</h2>
                     <div className="BigText">
-                            <p>{aboutContent}</p>
+                            <p>{aboutContent.description}</p>
                         </div>
                 </div>
             </div>
