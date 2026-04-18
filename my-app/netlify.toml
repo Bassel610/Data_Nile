@@ -1,0 +1,16 @@
+[build]
+  base    = "."
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  CI                  = "false"
+  NODE_VERSION        = "20"
+  # Point this at your deployed backend before deploying.
+  # In the Netlify UI: Site settings → Build & deploy → Environment.
+  REACT_APP_API_BASE  = "http://localhost:5000"
+
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
