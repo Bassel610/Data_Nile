@@ -1,34 +1,26 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Header from "../../Shared/Header/Header";
-import Img from "../../Componant/HomePage/Slider/Slider";
+import Slider from "../../Componant/HomePage/Slider/Slider";
 import AboutUs from "../../Componant/HomePage/AboutUs/AboutUs";
-import OurServices from "../../Componant/HomePage/OurService/OurService";
 import VideoSection from "../../Componant/HomePage/VideoSection/VideoSection";
+import OurService from "../../Componant/HomePage/OurService/OurService";
 import ContactUs from "../../Componant/HomePage/ContactUs/ContactUs";
+import Footer from "../../Componant/HomePage/Footer/Footer";
 import "./HomePage.css";
 
-function HomePage() {
-    const [indicator, setIndicator] = useState(true);
-    const [toggleForm, setToggleForm] = useState(false);
+export default function HomePage() {
+  const [contactOpen, setContactOpen] = useState(false);
+  const onConnect = () => setContactOpen(true);
 
-    return (
-        <>
-            {indicator && (
-                <div className="indicator">
-                    <div className="OverLayer"></div>
-                    <span className="loader"></span>
-                </div>
-            )}
-            <Header OpenDialog={() => setToggleForm(true)} />
-            <div className="Slider">
-                <Img setIndicator={setIndicator}/>
-            </div>
-            <AboutUs setIndicator={setIndicator} />
-            <VideoSection setIndicator={setIndicator} />
-            <OurServices setIndicator={setIndicator} />
-            <ContactUs toggleForm={toggleForm} setToggleForm={setToggleForm} />
-        </>
-    );
+  return (
+    <>
+      <Header onConnect={onConnect} />
+      <Slider onConnect={onConnect} />
+      <AboutUs />
+      <VideoSection />
+      <OurService />
+      <ContactUs toggleForm={contactOpen} setToggleForm={setContactOpen} />
+      <Footer />
+    </>
+  );
 }
-
-export default HomePage;
