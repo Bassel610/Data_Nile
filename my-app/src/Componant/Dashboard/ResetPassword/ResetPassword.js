@@ -1,56 +1,98 @@
-import {  useState } from "react";
-import "./ResetPassword.css";
-import axios from "axios";
-import Swal from "sweetalert2";
+import React, { useState } from "react";
+import Panel from "../common/Panel";
+import { Card, Field, Input } from "../common/primitives";
+import Btn from "../../../Shared/ui/Btn";
+import Icon from "../../../Shared/icons/Icon";
+import { api } from "../../../api/client";
 
-function ResetPassword() {
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+export default function ResetPassword({ toast }) {
+  const [p1, setP1] = useState("");
+  const [p2, setP2] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
 
-    const showAlert = (text, icon) => {
-        Swal.fire({ text, icon });
-    };
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!p1 || !p2) return setErr("Both fields are required.");
+    if (p1 !== p2) return setErr("Passwords do not match.");
+    if (p1.length < 6) return setErr("Use at least 6 characters.");
+    setErr("");
+    setBusy(true);
+    try {
+      await api.changePassword(p1);
+      setP1("");
+      setP2("");
+      toast && toast("Password reset");
+    } catch (ex) {
+      setErr(ex.detail?.error || "Could not reset password.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
-    const handleResetPassword = (event) => {
-        event.preventDefault();
-        if (!newPassword.trim() || !confirmPassword.trim()) {
-            showAlert("Password fields cannot be empty", "error");
-            return;
-        }
-
-        if (newPassword !== confirmPassword) {
-            showAlert("Passwords do not match! Please try again.", "error");
-            return;
-        }
-
-        axios
-            .post("http://localhost:5000/password", { password: newPassword })
-            .then(() => showAlert("Password reset successfully!", "success"))
-            .catch((error) => console.error("Error updating password:", error));
-    };
-    return (
-        <>
-                <div className="password-reset-form">
-                    <h2 style={{textDecoration :'underline'}}>Reset Password</h2>
-                    <input
-                        type="password"
-                        placeholder="Enter new password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                    />
-                    <input
-                        style={{marginTop : '12px'}}
-                        type="password"
-                        placeholder="Confirm new password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    <button style={{marginTop : '12px'}} onClick={handleResetPassword}>
-                        Reset Password
-                    </button>
-                </div>
-        </>
-    );
+  return (
+    <Panel
+      kicker="Security"
+      title="Reset admin password"
+      sub="Change the password required to enter this console."
+    >
+      <Card style={{ maxWidth: 500 }}>
+        <form onSubmit={submit}>
+          <Field label="New password">
+            <Input
+              type="password"
+              value={p1}
+              onChange={(e) => setP1(e.target.value)}
+              placeholder="At least 6 characters"
+              disabled={busy}
+            />
+          </Field>
+          <Field label="Confirm password">
+            <Input
+              type="password"
+              value={p2}
+              onChange={(e) => setP2(e.target.value)}
+              placeholder="Re-enter it"
+              disabled={busy}
+            />
+          </Field>
+          {err && (
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 11.5,
+                color: "var(--terracotta)",
+                marginBottom: 14,
+              }}
+            >
+              {err}
+            </div>
+          )}
+          <Btn
+            kind="primary"
+            size="lg"
+            type="submit"
+            style={{ width: "100%", justifyContent: "center" }}
+            icon={<Icon.Check s={14} />}
+          >
+            {busy ? "Saving…" : "Update password"}
+          </Btn>
+        </form>
+        <div
+          style={{
+            marginTop: 20,
+            paddingTop: 18,
+            borderTop: "1px dashed var(--line)",
+            fontFamily: "var(--font-mono)",
+            fontSize: 10.5,
+            color: "var(--ink-3)",
+            lineHeight: 1.6,
+          }}
+        >
+          Password is stored server-side. Existing sessions stay valid until
+          you log out.
+        </div>
+      </Card>
+    </Panel>
+  );
 }
-
-export default ResetPassword;
