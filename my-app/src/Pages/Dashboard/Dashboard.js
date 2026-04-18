@@ -1,104 +1,61 @@
-import { useEffect, useState } from "react"; 
-import EditText from "../../Componant/Dashboard/EditHomePage/index";
+import React, { useEffect, useState } from "react";
+import PasswordGate from "../../Componant/Dashboard/PasswordGate/PasswordGate";
+import Sidebar from "../../Componant/Dashboard/Sidebar/Sidebar";
+import ManageHome from "../../Componant/Dashboard/EditHomePage";
+import ManageImages from "../../Componant/Dashboard/Image/mange_Image";
+import MangeLayout from "../../Componant/Dashboard/layout/MangeLayout";
 import Invites from "../../Componant/Dashboard/Invites/Invites";
 import ResetPassword from "../../Componant/Dashboard/ResetPassword/ResetPassword";
-import axios from "axios";
-import ImageUploader from "../../Componant/Dashboard/Image/mange_Image";
-import MangeLayout from "../../Componant/Dashboard/layout/MangeLayout";
+import useToast from "../../Componant/Dashboard/common/useToast";
+import { refreshTheme } from "../../store/theme";
+import { api, hasToken, setToken } from "../../api/client";
+import "./Dashboard.css";
 
-import './Dashboard.css'
+const SECTION_KEY = "datanile_admin_section";
 
+export default function Dashboard() {
+  const [authed, setAuthed] = useState(() => hasToken());
+  const [active, setActive] = useState(
+    () => localStorage.getItem(SECTION_KEY) || "home"
+  );
+  const [toastUI, toast] = useToast();
 
-function Dashboard({colorPalette,
-  selectedColors,
-  onColorChange,}) {
-    const [password, setPassword] = useState('');
-    const [activeSection, setActiveSection] = useState("EditHomePage"); // Default section
-    let isAuthorized = localStorage.getItem("isAuthorized");
-    const [getLogos, setGetLogos] = useState([]);
+  useEffect(() => {
+    localStorage.setItem(SECTION_KEY, active);
+  }, [active]);
 
-    useEffect(() => {
-        const fetchImages = async () => {
-          try {
-            const response = await axios.get("http://localhost:5000/images");
-            setGetLogos(response.data?.[0].Logos?.filter((ele) => ele.isActive === true)?.[0] || []);
-          } catch (error) {
-            console.error("Error fetching images:", error);
-          }
-        };
-        fetchImages();
-    }, []);
+  useEffect(() => {
+    refreshTheme();
+  }, []);
 
-    const verifyPasswordContent = async () => {
-        try {
-            const response = await axios.post("http://localhost:5000/verify-password", { password });
-            if (response.data.status === true) {
-                localStorage.setItem("isAuthorized", true);
-                window.location.reload();
-            }
-        } catch (error) {
-            console.error("❌ Password verification failed:", error.response?.data || error.message);
-        }
-    };
-    
-    const handleLogout = () => {
-        localStorage.removeItem("isAuthorized");
-        window.location.href = '/';
-    };
+  if (!authed) return <PasswordGate onAuth={() => setAuthed(true)} />;
 
-    if (!isAuthorized) {
-        return (
-            <div className="password-form">
-                <h2>Password Required</h2>
-                <input  
-                    type="password"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button 
-                    style={{ width: "113px", height: "40px", padding: "4px 8px", margin: "6px" }}  
-                    onClick={verifyPasswordContent}
-                >
-                    Submit
-                </button>
-            </div>
-        );
-    }
+  const onLogout = async () => {
+    try {
+      await api.logout();
+    } catch {}
+    setToken("");
+    setAuthed(false);
+  };
 
-    return (
-        <div style={{ display: 'flex' }}>
-            {/* Sidebar */}
-            <div className="AsideSection">
-                <div className='Logo'>
-                    <img src={getLogos?.url} alt="Logo" />
-                </div>
-                <ul>
-                    <li onClick={() => setActiveSection("EditHomePage")}><span>Manage Home Page</span></li>
-                    <li onClick={() => setActiveSection("MangeImages")}><span>Manage Images</span></li>
-                    <li onClick={() => setActiveSection("MangeLayout")}><span>Manage Layout</span></li>
-                    <li onClick={() => setActiveSection("Invites")}><span>Invites</span></li>
-                    <li onClick={() => setActiveSection("ResetPassword")}><span>Reset Password</span></li>
-                    <li onClick={handleLogout}><span>Logout</span></li>
-                </ul>
-            </div>
-
-            {/* Main Content */}
-            <div className="CenterSection" style={{ alignItems: activeSection === "Invites" ? 'start' : 'center' }}>
-                {activeSection === "EditHomePage" && <EditText />}
-                {activeSection === "Invites" && <Invites />}
-                {activeSection === "ResetPassword" && <ResetPassword />}
-                {activeSection === "MangeImages" && <ImageUploader />}
-                {activeSection === "MangeLayout" && (
-                    <MangeLayout 
-                        colorPalette={colorPalette} 
-                        selectedColors={selectedColors} 
-                        onColorChange={onColorChange} 
-                    />
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className="admin-shell" style={{ display: "flex", minHeight: "100vh" }}>
+      <Sidebar active={active} setActive={setActive} onLogout={onLogout} />
+      <main
+        className="admin-main"
+        style={{
+          flex: 1,
+          background: "var(--sand-2)",
+          minWidth: 0,
+        }}
+      >
+        {active === "home" && <ManageHome toast={toast} />}
+        {active === "images" && <ManageImages toast={toast} />}
+        {active === "layout" && <MangeLayout toast={toast} />}
+        {active === "invites" && <Invites toast={toast} />}
+        {active === "password" && <ResetPassword toast={toast} />}
+      </main>
+      {toastUI}
+    </div>
+  );
 }
-
-export default Dashboard;
