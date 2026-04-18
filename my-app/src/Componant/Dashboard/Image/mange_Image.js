@@ -1,123 +1,167 @@
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
-import axios from "axios";
-import Dropzone from "./Dropzone";
-import DialogCom from "./Dialog";
+import React from "react";
+import Panel from "../common/Panel";
+import { Card } from "../common/primitives";
+import Btn from "../../../Shared/ui/Btn";
+import Icon from "../../../Shared/icons/Icon";
 
-const ImageUpload = () => {
-  const [sliderPhoto, setSliderPhoto] = useState([]);
-  const [GalleryPhoto, setGalleryPhoto] = useState([]);
-  const [storedPhotos, setStoredPhotos] = useState([]);
-  const [getStoredPhotos, setGetStoredPhotos] = useState([]);
-  const [getGalleryPhoto, setGetGalleryPhoto] = useState([]);
-  const [getSlider, setGetSlider] = useState([]);
-  const [openGallery, setOpenGallery] = useState(false);
-  const [logos, setLogos] = useState([]);
-  const [getLogos, setGetLogos] = useState([]);
-  const [indicator, setIndicator] = useState(false);
-  const [refetch, setRefetch] = useState(0);
+const CATEGORIES = [
+  { k: "slider", l: "Slider" },
+  { k: "gallery", l: "Gallery" },
+  { k: "stored", l: "Stored photos" },
+  { k: "logos", l: "Logos" },
+];
 
-  const handleDrop = (category, files) => {
-    if (category === "slider") setSliderPhoto((prev) => [...prev, ...files]);
-    else if (category === "GalleryPhoto") setGalleryPhoto((prev) => [...prev, ...files]);
-    else if (category === "StoredPhotos") setStoredPhotos((prev) => [...prev, ...files]);
-    else if (category === "Logos") setLogos((prev) => [...prev, ...files]);
-  };
-
-  const handleUpload = async () => {
-    setIndicator(true)
-    const formData = new FormData();
-
-    sliderPhoto.forEach((file) => formData.append("slider", file));
-    GalleryPhoto.forEach((file) => formData.append("GalleryPhoto", file));
-    storedPhotos.forEach((file) => formData.append("StoredPhotos", file));
-    logos.forEach((file) => formData.append("Logos", file));
-
-    try {
-      const response = await axios.post("http://localhost:5000/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setRefetch((prev) => !prev)
-      setIndicator(false)
-      console.log("Upload success:", response.data);
-    } catch (error) {
-      setIndicator(false)
-      console.error("Error uploading images:", error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/images");
-        setGetStoredPhotos(response.data?.[0].StoredPhotos || []);
-        setGetGalleryPhoto(response.data?.[0].GalleryPhoto || []);
-        setGetSlider(response.data?.[0].slider || []);
-        setGetLogos(response.data?.[0].Logos || []);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
-    };
-    fetchImages();
-  }, [refetch]);
-
-  return (
-    <>
-    {indicator && (
-      <div className="indicator">
-          <div className="OverLayer"></div>
-          <span className="loader"></span>
-      </div>
-  )}
-    <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
-      <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold", textAlign: "center" }}>
-        Upload Images
-      </Typography>
-
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Dropzone category="slider" onDrop={handleDrop} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Dropzone category="GalleryPhoto" onDrop={handleDrop} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Dropzone category="StoredPhotos" onDrop={handleDrop} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Dropzone category="Logos" onDrop={handleDrop} />
-        </Grid>
-      </Grid>
-
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-        <Button sx={{backgroundColor :'var(--primary-bg)', mr: 2}} variant="contained" color="primary" onClick={handleUpload}>
-          Upload
-        </Button>
-        <Button sx={{color: 'var(--primary-bg)', borderBlockColor :'var(--border-color)'}} variant="outlined" color="secondary" onClick={() => setOpenGallery(true)}>
-          Open Gallery
-        </Button>
-      </Box>
-    
-    <DialogCom 
-    setRefetch={setRefetch}
-    openGallery={openGallery} 
-    setOpenGallery={setOpenGallery} 
-    GetLogos={getLogos} 
-    setGetLogos={setGetLogos} 
-    getSlider={getSlider} 
-    setGetSlider={setGetSlider} 
-    getStoredPhotos={getStoredPhotos} 
-    setGetStoredPhotos={setGetStoredPhotos} 
-    getGalleryPhoto={getGalleryPhoto} 
-    setGetGalleryPhoto={setGetGalleryPhoto} />
-    </Box>
-    </>
-  );
+const PLACEHOLDERS = {
+  slider: [
+    "oklch(0.55 0.10 230)",
+    "oklch(0.58 0.12 45)",
+    "oklch(0.55 0.10 150)",
+  ],
+  gallery: [
+    "oklch(0.76 0.12 75)",
+    "oklch(0.48 0.09 225)",
+    "oklch(0.55 0.10 150)",
+    "oklch(0.58 0.12 45)",
+  ],
+  stored: ["oklch(0.62 0.08 195)", "oklch(0.35 0.08 235)"],
+  logos: ["oklch(0.32 0.07 235)", "oklch(0.20 0.02 250)"],
 };
 
-export default ImageUpload;
+export default function ManageImages({ toast }) {
+  const notify = (msg) => toast && toast(msg);
+  return (
+    <Panel
+      kicker="Images"
+      title="Manage images"
+      sub="Drop in hero slider imagery, gallery shots, logos, and the photo library."
+    >
+      <div
+        className="images-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 18,
+        }}
+      >
+        {CATEGORIES.map((c) => (
+          <Card key={c.k}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <div style={{ fontFamily: "var(--font-display)", fontSize: 20 }}>
+                {c.l}
+              </div>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 11,
+                  color: "var(--ink-3)",
+                }}
+              >
+                {PLACEHOLDERS[c.k].length} items
+              </span>
+            </div>
+            <div
+              style={{
+                border: "1.5px dashed var(--line)",
+                borderRadius: 10,
+                padding: 24,
+                background: "var(--sand)",
+                textAlign: "center",
+                cursor: "pointer",
+                transition: "all .2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--nile-deep)";
+                e.currentTarget.style.background =
+                  "color-mix(in oklch, var(--nile-deep) 4%, var(--sand))";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--line)";
+                e.currentTarget.style.background = "var(--sand)";
+              }}
+              onClick={() => notify("Drag & drop (demo)")}
+            >
+              <div style={{ color: "var(--nile-deep)" }}>
+                <Icon.Plus s={22} />
+              </div>
+              <div
+                style={{ fontSize: 13, color: "var(--ink-2)", marginTop: 8 }}
+              >
+                Drop files or click to browse
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10.5,
+                  color: "var(--ink-3)",
+                  marginTop: 4,
+                }}
+              >
+                PNG, JPG, WebP · up to 10 MB
+              </div>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: 8,
+                marginTop: 16,
+              }}
+            >
+              {PLACEHOLDERS[c.k].map((bg, i) => (
+                <div
+                  key={i}
+                  style={{
+                    aspectRatio: "1",
+                    borderRadius: 8,
+                    background: `linear-gradient(135deg, ${bg}, color-mix(in oklch, ${bg} 60%, var(--ink)))`,
+                    position: "relative",
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    border:
+                      i === 0 && c.k === "logos"
+                        ? "2px solid var(--gold)"
+                        : "none",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "flex-end",
+                      padding: 6,
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 9,
+                      color: "rgba(255,255,255,0.9)",
+                    }}
+                  >
+                    {c.k}_{i + 1}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        ))}
+      </div>
+      <div style={{ marginTop: 18, display: "flex", gap: 10 }}>
+        <Btn
+          kind="primary"
+          onClick={() => notify("Images uploaded")}
+          icon={<Icon.Arrow s={13} />}
+        >
+          Upload all
+        </Btn>
+        <Btn kind="secondary" onClick={() => notify("Gallery opened")}>
+          Open full gallery
+        </Btn>
+      </div>
+    </Panel>
+  );
+}
