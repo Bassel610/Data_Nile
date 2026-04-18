@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Data Nile — where companies meet data talent</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root {
+    /* Default: Papyrus theme */
+    --nile-deep: oklch(0.32 0.07 235);
+    --nile-mid:  oklch(0.48 0.09 225);
+    --nile-teal: oklch(0.62 0.08 195);
+    --reed:      oklch(0.55 0.10 150);
+    --sand:      oklch(0.94 0.025 82);
+    --sand-2:    oklch(0.89 0.035 80);
+    --sand-3:    oklch(0.82 0.045 75);
+    --ink:       oklch(0.20 0.018 250);
+    --ink-2:     oklch(0.38 0.018 250);
+    --ink-3:     oklch(0.55 0.012 250);
+    --gold:      oklch(0.76 0.12 75);
+    --terracotta: oklch(0.58 0.12 45);
+    --paper:     oklch(0.97 0.015 82);
+    --line:      oklch(0.82 0.02 80);
+    --line-soft: oklch(0.88 0.015 80);
+
+    --font-display: 'Fraunces', 'Newsreader', Georgia, serif;
+    --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Geist Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+    --radius-s: 6px;
+    --radius-m: 10px;
+    --radius-l: 18px;
+  }
+
+  [data-theme="midnight"] {
+    --nile-deep: oklch(0.78 0.09 200);
+    --nile-mid:  oklch(0.65 0.10 210);
+    --nile-teal: oklch(0.72 0.09 190);
+    --reed:      oklch(0.72 0.11 150);
+    --sand:      oklch(0.16 0.015 245);
+    --sand-2:    oklch(0.20 0.018 245);
+    --sand-3:    oklch(0.25 0.02 245);
+    --ink:       oklch(0.96 0.01 90);
+    --ink-2:     oklch(0.78 0.012 90);
+    --ink-3:     oklch(0.60 0.015 90);
+    --gold:      oklch(0.80 0.13 75);
+    --terracotta: oklch(0.68 0.13 45);
+    --paper:     oklch(0.12 0.012 245);
+    --line:      oklch(0.28 0.015 245);
+    --line-soft: oklch(0.22 0.012 245);
+  }
+
+  [data-theme="reed"] {
+    --nile-deep: oklch(0.35 0.08 155);
+    --nile-mid:  oklch(0.50 0.10 150);
+    --nile-teal: oklch(0.65 0.09 170);
+    --reed:      oklch(0.55 0.12 55);
+    --sand:      oklch(0.95 0.02 95);
+    --sand-2:    oklch(0.90 0.03 92);
+    --sand-3:    oklch(0.84 0.04 90);
+    --ink:       oklch(0.22 0.02 150);
+    --ink-2:     oklch(0.40 0.018 150);
+    --ink-3:     oklch(0.55 0.014 150);
+    --gold:      oklch(0.74 0.13 80);
+    --terracotta: oklch(0.58 0.13 40);
+    --paper:     oklch(0.97 0.015 92);
+    --line:      oklch(0.82 0.025 90);
+    --line-soft: oklch(0.88 0.018 90);
+  }
+
+  [data-font="editorial"] {
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-sans: 'Geist', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', monospace;
+  }
+  [data-font="classical"] {
+    --font-display: 'Newsreader', Georgia, serif;
+    --font-sans: 'Newsreader', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+  [data-font="technical"] {
+    --font-display: 'Geist Mono', monospace;
+    --font-sans: 'Geist', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  [data-density="compact"] {
+    --gap-s: 8px; --gap-m: 14px; --gap-l: 22px;
+    --pad-s: 10px; --pad-m: 16px; --pad-l: 24px;
+  }
+  [data-density="cozy"] {
+    --gap-s: 12px; --gap-m: 20px; --gap-l: 32px;
+    --pad-s: 14px; --pad-m: 22px; --pad-l: 36px;
+  }
+  [data-density="spacious"] {
+    --gap-s: 16px; --gap-m: 28px; --gap-l: 48px;
+    --pad-s: 20px; --pad-m: 32px; --pad-l: 56px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--sand);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  ::selection { background: var(--gold); color: var(--ink); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+  // Tweakable defaults — persisted by host
+  window.__TWEAKS__ = /*EDITMODE-BEGIN*/{
+    "theme": "papyrus",
+    "font": "technical",
+    "density": "cozy",
+    "cardVariant": "editorial",
+    "tableVariant": "rows",
+    "chartVariant": "river"
+  }/*EDITMODE-END*/;
+</script>
+
+<script type="text/babel" src="app/icons.jsx"></script>
+<script type="text/babel" src="app/data.jsx"></script>
+<script type="text/babel" src="app/store.jsx"></script>
+<script type="text/babel" src="app/components.jsx"></script>
+<script type="text/babel" src="app/landing.jsx"></script>
+<script type="text/babel" src="app/main.jsx"></script>
+</body>
+</html>
