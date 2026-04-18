@@ -1,169 +1,218 @@
-const express = require('express');
-const cors = require('cors');
-const fs = require('fs').promises; // Import fs.promises for asynchronous file operations
-const path = require('path'); // Import path module
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs").promises;
+const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
-// const PORT = process.env.PORT || 5000;
-
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
-async function readJsonFile(filename) {
-    try {
-        const filePath = path.join(__dirname, filename); // Adjust the path as per your file structure
-        const jsonData = await fs.readFile(filePath, 'utf-8');
-        return JSON.parse(jsonData);
-    } catch (error) {
-        console.error('Error reading JSON file:', error);
-        throw error;
+const DATA_FILE = path.join(__dirname, "data.json");
+
+const DEFAULT_DATA = {
+  heroTitle: "Where companies meet the data minds that move them.",
+  heroSub:
+    "Data Nile connects growing companies with vetted analysts — hire for a project, a quarter, or a whole roadmap.",
+  about: {
+    title: "About Data Nile",
+    description:
+      "We connect growing companies with vetted data analysts and engineers across the region. One contract, one dashboard, and a team that flows with your roadmap — not against it.",
+  },
+  services: {
+    title: "Our Services",
+    items: [
+      { t: "Analytics on demand", d: "SQL, dashboards, and data storytelling — delivered by senior analysts, billed by the hour." },
+      { t: "Warehouse & dbt", d: "From event streams to a clean semantic layer. We model it, test it, document it." },
+      { t: "ML & forecasting", d: "Churn, demand, and experimentation platforms shipped end-to-end." },
+      { t: "Executive dashboards", d: "The numbers your board actually reads — pressure-tested against scrutiny." },
+    ],
+  },
+  contactForm: [
+    { id: "name", type: "input", label: "Full name", value: [""] },
+    { id: "email", type: "input", label: "Work email", value: [""] },
+    { id: "role", type: "select", label: "I'm a…", value: ["Company hiring", "Analyst looking for work", "Just exploring"] },
+    { id: "budget", type: "select", label: "Budget range", value: ["< $5k", "$5k – $15k", "$15k – $50k", "$50k+"] },
+    { id: "msg", type: "textarea", label: "Tell us about your project", value: [""] },
+  ],
+  invites: [],
+  theme: {},
+  adminPassword: "datanile",
+  sessions: [],
+};
+
+const CONTENT_KEYS = [
+  "heroTitle",
+  "heroSub",
+  "about",
+  "services",
+  "contactForm",
+];
+
+async function readData() {
+  try {
+    const raw = await fs.readFile(DATA_FILE, "utf-8");
+    return { ...DEFAULT_DATA, ...JSON.parse(raw) };
+  } catch (err) {
+    if (err.code === "ENOENT") {
+      await fs.writeFile(DATA_FILE, JSON.stringify(DEFAULT_DATA, null, 2));
+      return { ...DEFAULT_DATA };
     }
+    throw err;
+  }
 }
 
+async function writeData(data) {
+  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
+}
 
-// Define routes for handling JSON files
+function publicContent(data) {
+  const out = {};
+  CONTENT_KEYS.forEach((k) => (out[k] = data[k]));
+  return out;
+}
 
-// Define route to get the content of the about section
-app.get('/about', async (req, res) => {
-    try {
-        const data = await readJsonFile('./about.json');
-        res.json(data);
-    } catch (err) {
-        console.error('Error reading about section data:', err);
-        res.status(500).json({ error: 'Failed to read about section data' });
-    }
+function requireAuth(req, res, next) {
+  const token = (req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+  if (!token) return res.status(401).json({ error: "Missing token" });
+  readData()
+    .then((data) => {
+      if (!data.sessions.includes(token))
+        return res.status(401).json({ error: "Invalid token" });
+      next();
+    })
+    .catch(next);
+}
+
+app.get("/api/site-content", async (_req, res, next) => {
+  try {
+    const data = await readData();
+    res.json(publicContent(data));
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Define route to update the content of the about section
-app.post('/about', async (req, res) => {
-    try {
-        const newData = req.body;
-        await fs.writeFile(path.join(__dirname, './about.json'), JSON.stringify(newData, null, 2));
-        console.log('About section data updated successfully:', newData);
-        res.status(200).json({ message: 'About section data updated successfully', newData });
-    } catch (err) {
-        console.error('Error updating about section data:', err);
-        res.status(500).json({ error: 'Failed to update about section data' });
-    }
+app.patch("/api/site-content", requireAuth, async (req, res, next) => {
+  try {
+    const data = await readData();
+    const patch = req.body || {};
+    CONTENT_KEYS.forEach((k) => {
+      if (patch[k] !== undefined) data[k] = patch[k];
+    });
+    await writeData(data);
+    res.json(publicContent(data));
+  } catch (err) {
+    next(err);
+  }
 });
 
-
-// Define route to get the content of the password section
-app.get('/password', async (req, res) => {
-    try {
-        const data = await fs.readFile(path.join(__dirname, './password.json'));
-        const passwordContent = JSON.parse(data);
-        res.json(passwordContent);
-    } catch (err) {
-        console.error('Error reading password section data:', err);
-        res.status(500).json({ error: 'Failed to read password section data' });
-    }
+app.get("/api/invites", requireAuth, async (_req, res, next) => {
+  try {
+    const data = await readData();
+    res.json(data.invites);
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Define route to update the content of the password section
-app.post('/password', async (req, res) => {
-    try {
-        const newData = req.body;
-        await fs.writeFile(path.join(__dirname, './password.json'), JSON.stringify(newData, null, 2));
-        console.log('Password section data updated successfully:', newData);
-        res.status(200).json({ message: 'Password section data updated successfully', newData });
-    } catch (err) {
-        console.error('Error updating password section data:', err);
-        res.status(500).json({ error: 'Failed to update password section data' });
-    }
+app.post("/api/invites", async (req, res, next) => {
+  try {
+    const data = await readData();
+    const entry = {
+      id: "i" + Date.now(),
+      at: "just now",
+      ...req.body,
+    };
+    data.invites = [entry, ...data.invites];
+    await writeData(data);
+    res.status(201).json(entry);
+  } catch (err) {
+    next(err);
+  }
 });
 
-
-// Define route to get the content of the services section
-app.get('/services', async (req, res) => {
-    try {
-        const servicesData = await fs.readFile(path.join(__dirname, './services.json'));
-        const servicesContent = JSON.parse(servicesData);
-        res.json(servicesContent);
-    } catch (error) {
-        console.error('Error fetching services:', error);
-        res.status(500).json({ error: 'Failed to fetch services' });
-    }
+app.delete("/api/invites/:id", requireAuth, async (req, res, next) => {
+  try {
+    const data = await readData();
+    const before = data.invites.length;
+    data.invites = data.invites.filter((i) => i.id !== req.params.id);
+    if (data.invites.length === before)
+      return res.status(404).json({ error: "Not found" });
+    await writeData(data);
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Define route to update the content of the services section
-app.post('/services', async (req, res) => {
-    try {
-        const newData = req.body;
-        await fs.writeFile(path.join(__dirname, './services.json'), JSON.stringify(newData, null, 2));
-        console.log('Services section data updated successfully:', newData);
-        res.status(200).json({ message: 'Services section data updated successfully', newData });
-    } catch (err) {
-        console.error('Error updating services section data:', err);
-        res.status(500).json({ error: 'Failed to update services section data' });
-    }
+app.get("/api/theme", async (_req, res, next) => {
+  try {
+    const data = await readData();
+    res.json(data.theme || {});
+  } catch (err) {
+    next(err);
+  }
 });
 
-
-// Define route to get the content of the database section
-app.get('/database', async (req, res) => {
-    try {
-        const data = await fs.readFile(path.join(__dirname, './database.json'));
-        const databaseContent = JSON.parse(data);
-        res.json(databaseContent);
-    } catch (err) {
-        console.error('Error reading database section data:', err);
-        res.status(500).json({ error: 'Failed to read database section data' });
-    }
+app.patch("/api/theme", requireAuth, async (req, res, next) => {
+  try {
+    const data = await readData();
+    data.theme = { ...(data.theme || {}), ...(req.body || {}) };
+    await writeData(data);
+    res.json(data.theme);
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Define route to update the content of the database section
-app.post('/database', async (req, res) => {
-    try {
-        const newProfile = req.body;
-        let profiles = await fs.readFile(path.join(__dirname, './database.json'), 'utf8');
-        profiles = JSON.parse(profiles);
-        newProfile.id = profiles.length + 1; // Generate a new ID (assuming IDs are sequential)
-        profiles.push(newProfile);
-        await fs.writeFile(path.join(__dirname, './database.json'), JSON.stringify(profiles, null, 2));
-        console.log('Profile added successfully:', newProfile);
-        res.status(200).json({ message: 'Profile added successfully', profile: newProfile });
-    } catch (err) {
-        console.error('Error updating database section data:', err);
-        res.status(500).json({ error: 'Failed to update database section data' });
-    }
+app.post("/api/admin/login", async (req, res, next) => {
+  try {
+    const { password } = req.body || {};
+    const data = await readData();
+    if (!password || password !== data.adminPassword)
+      return res.status(401).json({ error: "Wrong password" });
+    const token = crypto.randomBytes(24).toString("hex");
+    data.sessions = [...(data.sessions || []), token].slice(-20);
+    await writeData(data);
+    res.json({ token });
+  } catch (err) {
+    next(err);
+  }
 });
 
-app.delete('/database/:id', async (req, res) => {
-    try {
-        // Read the JSON file
-        let data = await fs.readFile("./database.json", 'utf8');
-        data = JSON.parse(data);
-
-        // Get the profile ID from request parameters
-        const profileId = parseInt(req.params.id);
-
-        // Find index of profile with given ID
-        const index = data.findIndex(profile => profile.id === profileId);
-        if (index !== -1) {
-            // Remove profile from data array
-            data.splice(index, 1);
-
-            // Write updated data back to the JSON file
-            await fs.writeFile("./database.json", JSON.stringify(data, null, 2));
-
-            // Respond with success message
-            res.json({ message: 'Profile deleted successfully' });
-        } else {
-            // Profile with given ID not found
-            res.status(404).json({ error: 'Profile not found' });
-        }
-    } catch (error) {
-        // Handle errors
-        console.error('Error deleting profile:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+app.post("/api/admin/logout", requireAuth, async (req, res, next) => {
+  try {
+    const token = (req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+    const data = await readData();
+    data.sessions = (data.sessions || []).filter((t) => t !== token);
+    await writeData(data);
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Define the server port
+app.post("/api/admin/password", requireAuth, async (req, res, next) => {
+  try {
+    const { password } = req.body || {};
+    if (!password || password.length < 6)
+      return res.status(400).json({ error: "Password too short" });
+    const data = await readData();
+    data.adminPassword = password;
+    await writeData(data);
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(500).json({ error: "Server error" });
+});
+
 const port = process.env.PORT || 5000;
-
-// Start the server
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Data Nile API running on :${port}`);
 });
