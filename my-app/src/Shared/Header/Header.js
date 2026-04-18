@@ -1,54 +1,67 @@
-import { useEffect, useState } from "react";
-import "./Header.css"
-import axios from "axios";
-function Header ({OpenDialog}) {
-    const [getLogos, setGetLogos] = useState([]);
-    let HomeScroll = () => {
-        window.scrollTo({top: 0, behavior: 'smooth'})
-    }
-    let AboutScroll = () => {
-        window.scrollTo({top: 600, behavior: 'smooth'})
-    }
-    let ServiceScroll = () => {
-        window.scrollTo({top:   1600, behavior: 'smooth'})
-    }
-    let ContctScroll = () => {
-        window.scrollTo({top: 1870, behavior: 'smooth'})
-        setTimeout(() => {
-            OpenDialog()
-        }, 1000)
-    }
+import React from "react";
+import Btn from "../ui/Btn";
+import Logo from "../ui/Logo";
+import Icon from "../icons/Icon";
 
+const LINKS = [
+  { l: "Home", id: "home" },
+  { l: "About", id: "about" },
+  { l: "Services", id: "services" },
+  { l: "Contact", id: "connect" },
+];
 
-    useEffect(() => {
-        const fetchImages = async () => {
-          try {
-            const response = await axios.get("http://localhost:5000/images");
-            setGetLogos(response.data?.[0].Logos?.filter((ele) => ele.isActive === true)?.[0] || []);
-          } catch (error) {
-            console.error("Error fetching images:", error);
-          }
-        };
-        fetchImages();
-      }, []);
-
-    return (
-        <>
-            <div className="Header">
-                <div className="Logo">
-                    <img src={getLogos?.url} alt=";" />
-                </div>
-                <div className="List">
-                    <ul>
-                        <li onClick={HomeScroll}>Home</li>
-                        <li onClick={AboutScroll}>About Us</li>
-                        <li onClick={ServiceScroll}>Our Services</li>
-                        <li onClick={ContctScroll}>Contact Us</li>
-                    </ul>
-                </div>
-            </div>
-        </>
-    )
+export default function Header({ onConnect }) {
+  return (
+    <nav
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "18px clamp(24px,5vw,64px)",
+        background: "color-mix(in oklch, var(--sand) 88%, transparent)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        borderBottom: "1px solid var(--line-soft)",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <Logo size={36} />
+        <div
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 22,
+            letterSpacing: "-0.01em",
+          }}
+        >
+          Data Nile
+        </div>
+      </div>
+      <div
+        className="nav-links"
+        style={{
+          display: "flex",
+          gap: 28,
+          fontSize: 14,
+          color: "var(--ink-2)",
+        }}
+      >
+        {LINKS.map((n) => (
+          <a key={n.id} href={`#${n.id}`}>
+            {n.l}
+          </a>
+        ))}
+      </div>
+      <Btn
+        kind="primary"
+        size="sm"
+        onClick={onConnect}
+        icon={<Icon.Arrow s={12} />}
+      >
+        Connect
+      </Btn>
+    </nav>
+  );
 }
-
-export default Header
