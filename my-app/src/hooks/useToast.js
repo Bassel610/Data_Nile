@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Icon from "../../../Shared/icons/Icon";
+import Icon from "../Shared/icons/Icon";
 
 export default function useToast() {
   const [t, setT] = useState(null);

@@ -6,7 +6,7 @@ import ManageImages from "../../Componant/Dashboard/Image/mange_Image";
 import MangeLayout from "../../Componant/Dashboard/layout/MangeLayout";
 import Invites from "../../Componant/Dashboard/Invites/Invites";
 import ResetPassword from "../../Componant/Dashboard/ResetPassword/ResetPassword";
-import useToast from "../../Componant/Dashboard/common/useToast";
+import useToast from "../../hooks/useToast";
 import { refreshTheme } from "../../store/theme";
 import { api, hasToken, setToken } from "../../api/client";
 import "./Dashboard.css";

@@ -1,11 +1,6 @@
 import React from "react";
 import { useContent } from "../../../store/DataNileStore";
-
-const STATS = [
-  { n: "2,400+", l: "vetted analysts" },
-  { n: "94%", l: "retention rate" },
-  { n: "3.2 days", l: "avg. time to hire" },
-];
+import AboutStats from "./AboutStats";
 
 export default function AboutUs() {
   const [c] = useContent();
@@ -91,43 +86,7 @@ export default function AboutUs() {
           >
             {c.about.description}
           </p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 24,
-              marginTop: 48,
-              paddingTop: 32,
-              borderTop: "1px solid var(--line)",
-            }}
-          >
-            {STATS.map((s) => (
-              <div key={s.l}>
-                <div
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: 32,
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {s.n}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 10.5,
-                    color: "var(--ink-3)",
-                    marginTop: 8,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                  }}
-                >
-                  {s.l}
-                </div>
-              </div>
-            ))}
-          </div>
+          <AboutStats />
         </div>
       </div>
     </section>
