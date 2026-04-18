@@ -1,46 +1,109 @@
-@media (max-width: 768px) {
-    .Header .Logo{
-        margin: auto !important;
-    }
-    .MenuIcon {
-        display: block; /* Show the menu icon on small screens */
-    }
+/* ============================================================
+   Data Nile · responsive overrides
+   Inline styles have higher specificity than plain CSS, so
+   structural rules use !important. Keep colors/typography in
+   inline styles — only grid + width + visibility live here.
+   ============================================================ */
 
-    .List {
-        display: none; /* Hide the list by default on small screens */
-    }
-    .slideStyles{
-        height: 400px !important;
-    }
-    .Slider{
-        height: 380px;
-    }
-    .VideoSection{
-        height: 148px !important;
-    }
-    .AboutUs {
-        padding: 30px; /* Reduce padding for smaller screens */
-    }
-    
-    .AboutUs h2 {
-        font-size: 24px; /* Reduce heading font size for smaller screens */
-    }
-    
-    .AboutUs .BigText {
-        font-size: 13px; /* Reduce text font size for smaller screens */
-    }
-    .OurServices {
-        padding: 30px; /* Reduce padding for smaller screens */
-    }
-    
-    .OurServices h2 {
-        font-size: 24px; /* Reduce heading font size for smaller screens */
-    }
-    
-    .BigText {
-        font-size: 13px !important; /* Reduce text font size for smaller screens */
-    }
-    .ContactUs{
-        top: 173px;
-    }
+/* ---- Tablet (<=960px) ---- */
+@media (max-width: 960px) {
+  /* Landing: stack two-column sections */
+  .hero-grid,
+  .about-grid,
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+
+  .about-sticky {
+    position: static !important;
+  }
+
+  .hero-visual {
+    height: 380px !important;
+  }
+
+  /* Admin: stack sidebar above content */
+  .admin-shell {
+    flex-direction: column !important;
+  }
+
+  .admin-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    position: static !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    overflow-x: auto !important;
+  }
+
+  .admin-sidebar-nav {
+    flex: 1 1 auto !important;
+    flex-direction: row !important;
+    padding: 10px 12px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-sidebar-nav button {
+    white-space: nowrap;
+    border-left: none !important;
+    border-bottom: 2px solid transparent !important;
+  }
+
+  .admin-sidebar > div:first-child,
+  .admin-sidebar > div:last-child {
+    border: none !important;
+    padding: 10px 14px !important;
+  }
+
+  /* Admin: collapse section grids */
+  .invites-grid,
+  .images-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .layout-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .admin-field-row {
+    grid-template-columns: 1fr 1fr auto !important;
+  }
+}
+
+/* ---- Mobile (<=640px) ---- */
+@media (max-width: 640px) {
+  /* Nav: hide anchor list, keep logo + Connect */
+  .nav-links {
+    display: none !important;
+  }
+
+  /* Hide floating hero cards — they get cramped */
+  .hero-visual {
+    display: none !important;
+  }
+
+  /* Admin: reshape row builders to stack */
+  .admin-item-row,
+  .admin-field-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-item-row > button,
+  .admin-field-row > button {
+    justify-self: end;
+  }
+}
+
+/* ---- Small mobile (<=420px) ---- */
+@media (max-width: 420px) {
+  .admin-sidebar > div:first-child > div:last-child > div:first-child {
+    font-size: 16px !important;
+  }
 }
