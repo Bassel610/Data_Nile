@@ -4,6 +4,7 @@
 
 **A full-stack React application with QR code generation, drag-and-drop uploads, and a Firebase + Express backend**
 
+[![CI](https://github.com/Bassel610/Data_Nile/actions/workflows/ci.yml/badge.svg)](https://github.com/Bassel610/Data_Nile/actions/workflows/ci.yml)
 [![React](https://img.shields.io/badge/React-18.2-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Material UI](https://img.shields.io/badge/Material--UI-6.4-007FFF?logo=mui&logoColor=white)](https://mui.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-11-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
