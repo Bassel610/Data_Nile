@@ -1,6 +1,6 @@
 import React from "react";
-import Icon from "../../../Shared/icons/Icon";
-import Btn from "../../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
+import Btn from "../../Shared/ui/Btn";
 import { useContent } from "../../../store/DataNileStore";
 import useContactForm from "../../../hooks/useContactForm";
 

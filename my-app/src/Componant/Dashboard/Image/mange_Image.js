@@ -1,9 +1,9 @@
 import React from "react";
 import Panel from "../common/Panel";
-import Btn from "../../../Shared/ui/Btn";
-import Icon from "../../../Shared/icons/Icon";
+import Btn from "../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
 import ImageCategoryCard from "./ImageCategoryCard";
-import { IMAGE_CATEGORIES } from "../constants/imageCategories";
+import { IMAGE_CATEGORIES } from "../../../constants/imageCategories";
 
 export default function ManageImages({ toast }) {
   const notify = (msg) => toast && toast(msg);

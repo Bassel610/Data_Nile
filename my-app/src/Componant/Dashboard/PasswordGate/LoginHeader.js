@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../../Shared/ui/Logo";
+import Logo from "../../Shared/ui/Logo";
 
 export default function LoginHeader() {
   return (

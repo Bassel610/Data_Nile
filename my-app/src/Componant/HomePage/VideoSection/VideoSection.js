@@ -1,5 +1,5 @@
 import React from "react";
-import NileFlow from "../../../Shared/ui/NileFlow";
+import NileFlow from "../../Shared/ui/NileFlow";
 
 export default function VideoSection() {
   return (

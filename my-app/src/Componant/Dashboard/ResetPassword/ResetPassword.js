@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Panel from "../common/Panel";
 import { Card, Field, Input } from "../common/primitives";
-import Btn from "../../../Shared/ui/Btn";
-import Icon from "../../../Shared/icons/Icon";
+import Btn from "../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
 import { api } from "../../../api/client";
 
 export default function ResetPassword({ toast }) {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Logo from "../../../Shared/ui/Logo";
-import Icon from "../../../Shared/icons/Icon";
+import Logo from "../../Shared/ui/Logo";
+import Icon from "../../Shared/icons/Icon";
 
 export default function Footer() {
   return (

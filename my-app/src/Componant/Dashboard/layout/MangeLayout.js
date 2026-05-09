@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Panel from "../common/Panel";
 import { Card } from "../common/primitives";
-import Btn from "../../../Shared/ui/Btn";
+import Btn from "../../Shared/ui/Btn";
 import { THEME_PALETTE, loadTheme, applyTheme, saveTheme, resetTheme } from "../../../store/theme";
 import ThemePaletteRow from "./ThemePaletteRow";
 import ThemePreview from "./ThemePreview";

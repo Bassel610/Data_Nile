@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "../common/primitives";
-import Btn from "../../../Shared/ui/Btn";
-import Icon from "../../../Shared/icons/Icon";
+import Btn from "../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
 
 function EmptyState() {
   return (

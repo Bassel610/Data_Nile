@@ -1,6 +1,6 @@
 import React from "react";
-import Icon from "../../../Shared/icons/Icon";
-import { SECTIONS } from "../constants/sections";
+import Icon from "../../Shared/icons/Icon";
+import { SECTIONS } from "../../../constants/sections";
 
 export default function SidebarNav({ active, setActive }) {
   return (

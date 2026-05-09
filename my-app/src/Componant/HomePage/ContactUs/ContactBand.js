@@ -1,7 +1,7 @@
 import React from "react";
-import NileFlow from "../../../Shared/ui/NileFlow";
-import Btn from "../../../Shared/ui/Btn";
-import Icon from "../../../Shared/icons/Icon";
+import NileFlow from "../../Shared/ui/NileFlow";
+import Btn from "../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
 
 export default function ContactBand({ onConnect }) {
   return (

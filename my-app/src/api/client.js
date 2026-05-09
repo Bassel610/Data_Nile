@@ -51,7 +51,8 @@ export const api = {
   patchTheme: (patch) =>
     request("PATCH", "/api/theme", patch, { auth: true }),
 
-  login: (password) => request("POST", "/api/admin/login", { password }),
+  login: (email, password) =>
+    request("POST", "/api/admin/login", { email, password }),
   logout: () =>
     request("POST", "/api/admin/logout", undefined, { auth: true }),
   changePassword: (password) =>

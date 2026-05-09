@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "../../Shared/Header/Header";
+import Header from "../../Componant/Shared/Header/Header";
 import Slider from "../../Componant/HomePage/Slider/Slider";
 import AboutUs from "../../Componant/HomePage/AboutUs/AboutUs";
 import VideoSection from "../../Componant/HomePage/VideoSection/VideoSection";

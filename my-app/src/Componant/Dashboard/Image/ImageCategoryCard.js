@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "../common/primitives";
-import Icon from "../../../Shared/icons/Icon";
-import { IMAGE_PLACEHOLDERS } from "../constants/imageCategories";
+import Icon from "../../Shared/icons/Icon";
+import { IMAGE_PLACEHOLDERS } from "../../../constants/imageCategories";
 
 export default function ImageCategoryCard({ k, l, onNotify }) {
   const placeholders = IMAGE_PLACEHOLDERS[k];

@@ -29,6 +29,7 @@ coverage/
 .idea/
 .vscode/
 *.swp
+.claude/
 
 # Misc
 *.pem

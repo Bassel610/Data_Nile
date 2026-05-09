@@ -1,6 +1,6 @@
 import React from "react";
-import Avatar from "../../../Shared/ui/Avatar";
-import Tag from "../../../Shared/ui/Tag";
+import Avatar from "../../Shared/ui/Avatar";
+import Tag from "../../Shared/ui/Tag";
 
 export default function HeroCard({ analyst }) {
   const a = analyst;

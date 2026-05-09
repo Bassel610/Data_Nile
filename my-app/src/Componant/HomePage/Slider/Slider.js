@@ -1,7 +1,7 @@
 import React from "react";
-import NileFlow from "../../../Shared/ui/NileFlow";
-import Btn from "../../../Shared/ui/Btn";
-import Icon from "../../../Shared/icons/Icon";
+import NileFlow from "../../Shared/ui/NileFlow";
+import Btn from "../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
 import { useContent } from "../../../store/DataNileStore";
 import { buildSlides } from "../../../constants/heroSlides";
 import HeroVisual from "./HeroVisual";

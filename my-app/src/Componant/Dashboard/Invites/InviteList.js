@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "../common/primitives";
-import Tag from "../../../Shared/ui/Tag";
-import Icon from "../../../Shared/icons/Icon";
+import Tag from "../../Shared/ui/Tag";
+import Icon from "../../Shared/icons/Icon";
 
 export default function InviteList({ invites, selected, onSelect }) {
   return (

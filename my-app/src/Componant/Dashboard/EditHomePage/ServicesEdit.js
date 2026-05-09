@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Field, Input, Textarea, SubHead } from "../common/primitives";
-import Btn from "../../../Shared/ui/Btn";
-import Icon from "../../../Shared/icons/Icon";
+import Btn from "../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
 import { useContent } from "../../../store/DataNileStore";
 
 export default function ServicesEdit({ toast }) {

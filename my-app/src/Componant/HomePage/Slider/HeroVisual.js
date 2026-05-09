@@ -1,6 +1,6 @@
 import React from "react";
 import HeroCard from "./HeroCard";
-import { ANALYSTS } from "../../../data/analysts";
+import { ANALYSTS } from "../../../data/seed";
 
 const CARDS = [
   { index: 0, top: 30, left: 30, rot: -3, z: 3 },

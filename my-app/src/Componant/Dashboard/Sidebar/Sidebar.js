@@ -3,7 +3,7 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarNav from "./SidebarNav";
 import SidebarFooter from "./SidebarFooter";
 
-export { SECTIONS } from "../constants/sections";
+export { SECTIONS } from "../../../constants/sections";
 
 export default function Sidebar({ active, setActive, onLogout }) {
   return (

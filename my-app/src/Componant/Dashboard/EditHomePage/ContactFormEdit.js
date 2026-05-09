@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Select, Input, SubHead } from "../common/primitives";
-import Btn from "../../../Shared/ui/Btn";
-import Icon from "../../../Shared/icons/Icon";
+import Btn from "../../Shared/ui/Btn";
+import Icon from "../../Shared/icons/Icon";
 import { useContent } from "../../../store/DataNileStore";
 
 export default function ContactFormEdit({ toast }) {
